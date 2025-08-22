@@ -1,0 +1,24 @@
+{
+  "name": "netflix-instagram-crm",
+  "version": "1.0.0",
+  "description": "Netflix-style CRM for Instagram links with full-stack MERN implementation",
+  "main": "server/src/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\"",
+    "client:dev": "cd client && npm run dev",
+    "client:build": "cd client && npm run build",
+    "client:preview": "cd client && npm run preview",
+    "server:dev": "cd server && npm run dev",
+    "server:start": "cd server && npm start",
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install",
+    "build": "cd client && npm run build",
+    "seed": "cd server && npm run seed"
+  },
+  "keywords": ["netflix", "instagram", "crm", "mern", "react", "mongodb"],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
