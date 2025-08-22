@@ -83,6 +83,7 @@ app.use("*", (req, res) => {
 app.use(errorHandler);
 
 // ---- FIXED PART ----
+// Run app.listen() only in development, skip on Vercel
 if (process.env.NODE_ENV !== "production") {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
@@ -90,4 +91,5 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
+// Export app for Vercel
 export default app;
