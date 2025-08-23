@@ -30,6 +30,9 @@ app.use(
   })
 );
 
+// Trust Vercel's proxy
+app.set("trust proxy", 1); // 1 = trust first proxy
+
 // CORS configuration
 app.use(
   cors({
