@@ -1,69 +1,74 @@
-import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Plus, Instagram } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { toast } from 'react-hot-toast'
-import NetflixRow from '../components/NetflixRow'
-import HeroSlider from '../components/HeroSlider'
-import LinkModal from '../components/LinkModal'
-import { api } from '../lib/api'
-import { useAuth } from '../contexts/AuthContext'
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Plus, Instagram } from "lucide-react";
+import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import NetflixRow from "../components/NetflixRow";
+import HeroSlider from "../components/HeroSlider";
+import LinkModal from "../components/LinkModal";
+import { api } from "../lib/api";
+import { useAuth } from "../contexts/AuthContext";
 
 const Home = () => {
-  const [groupedLinks, setGroupedLinks] = useState({})
-  const [isLoading, setIsLoading] = useState(true)
-  const [latestLinks, setLatestLinks] = useState([])
-  const [selectedLink, setSelectedLink] = useState(null)
-  const { user } = useAuth()
+  const [groupedLinks, setGroupedLinks] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [latestLinks, setLatestLinks] = useState([]);
+  const [selectedLink, setSelectedLink] = useState(null);
+  const { user } = useAuth();
 
   const fetchGroupedLinks = async () => {
     try {
-      setIsLoading(true)
-      const response = await api.get('/links/grouped')
-      setGroupedLinks(response.data)
-      
+      setIsLoading(true);
+      const response = await api.get("/links/grouped");
+      setGroupedLinks(response.data);
+
       // Get latest 5 links for hero slider
-      const allLinks = Object.values(response.data).flat()
-      const sortedLinks = allLinks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      setLatestLinks(sortedLinks.slice(0, 5))
+      const allLinks = Object.values(response.data).flat();
+      const sortedLinks = allLinks.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      setLatestLinks(sortedLinks.slice(0, 5));
     } catch (error) {
-      console.error('Error fetching grouped links:', error)
-      toast.error('Failed to load links')
+      console.error("Error fetching grouped links:", error);
+      toast.error("Failed to load links");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchGroupedLinks()
-  }, [])
+    fetchGroupedLinks();
+  }, []);
 
   const handleDeleteLink = async (linkId) => {
     try {
-      await api.delete(`/links/${linkId}`)
+      await api.delete(`/links/${linkId}`);
       // Refresh the grouped links
-      fetchGroupedLinks()
+      fetchGroupedLinks();
     } catch (error) {
-      console.error('Error deleting link:', error)
-      throw error
+      console.error("Error deleting link:", error);
+      throw error;
     }
-  }
+  };
 
   const handleUpdateLink = async (linkId, data) => {
     try {
-      await api.patch(`/links/${linkId}`, data)
+      await api.patch(`/links/${linkId}`, data);
       // Refresh the grouped links
-      fetchGroupedLinks()
+      fetchGroupedLinks();
     } catch (error) {
-      console.error('Error updating link:', error)
-      throw error
+      console.error("Error updating link:", error);
+      throw error;
     }
-  }
+  };
 
   const handleLinkClick = (link) => {
-    setSelectedLink(link)
-  }
-  const totalLinks = Object.values(groupedLinks).reduce((sum, links) => sum + links.length, 0)
+    setSelectedLink(link);
+  };
+  const totalLinks = Object.values(groupedLinks).reduce(
+    (sum, links) => sum + links.length,
+    0
+  );
 
   if (isLoading) {
     return (
@@ -77,7 +82,7 @@ const Home = () => {
           <span className="text-xl">Loading your collection...</span>
         </motion.div>
       </div>
-    )
+    );
   }
 
   if (totalLinks === 0) {
@@ -92,15 +97,19 @@ const Home = () => {
           <Instagram className="w-16 h-16 text-netflix-red mx-auto mb-6" />
           <h1 className="text-3xl font-bold mb-4">Your Instagram Collection</h1>
           <p className="text-netflix-lightGray mb-8">
-            Start building your personalized Netflix-style collection of Instagram posts and reels.
+            Start building your personalized Netflix-style collection of
+            Instagram posts and reels.
           </p>
-          <Link to="/add" className="netflix-button inline-flex items-center space-x-2">
+          <Link
+            to="/add"
+            className="netflix-button inline-flex items-center space-x-2"
+          >
             <Plus className="w-5 h-5" />
             <span>Add Your First Link</span>
           </Link>
         </div>
       </motion.div>
-    )
+    );
   }
 
   return (
@@ -112,10 +121,7 @@ const Home = () => {
     >
       {/* Hero Slider */}
       {latestLinks.length > 0 && (
-        <HeroSlider 
-          links={latestLinks} 
-          onLinkClick={handleLinkClick}
-        />
+        <HeroSlider links={latestLinks} onLinkClick={handleLinkClick} />
       )}
 
       {/* Hero Section */}
@@ -129,13 +135,13 @@ const Home = () => {
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
             Browse by Category
           </h2>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             <Link to="/add" className="netflix-button">
-              <Plus className="w-5 h-5 mr-2" />
+              <Plus className="w-4 h-4 mr-2" />
               Add New Link
             </Link>
             <span className="text-netflix-lightGray">
-              {totalLinks} {totalLinks === 1 ? 'link' : 'links'} saved
+              {totalLinks} {totalLinks === 1 ? "link" : "links"} saved
             </span>
           </div>
         </motion.div>
@@ -162,7 +168,7 @@ const Home = () => {
         />
       )}
     </motion.main>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

@@ -1,32 +1,32 @@
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { ExternalLink, Edit, Trash2, Copy } from 'lucide-react'
-import { toast } from 'react-hot-toast'
-import InstagramEmbed from './InstagramEmbed'
-import LinkModal from './LinkModal'
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { ExternalLink, Edit, Trash2, Copy } from "lucide-react";
+import { toast } from "react-hot-toast";
+import InstagramEmbed from "./InstagramEmbed";
+import LinkModal from "./LinkModal";
 
 const LinkCard = ({ link, onDelete, onUpdate }) => {
-  const [showModal, setShowModal] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
+  const [showModal, setShowModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(link.url)
-    toast.success('Link copied to clipboard!')
-  }
+    navigator.clipboard.writeText(link.url);
+    toast.success("Link copied to clipboard!");
+  };
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this link?')) {
-      setIsDeleting(true)
+    if (window.confirm("Are you sure you want to delete this link?")) {
+      setIsDeleting(true);
       try {
-        await onDelete(link._id)
-        toast.success('Link deleted successfully')
+        await onDelete(link._id);
+        toast.success("Link deleted successfully");
       } catch (error) {
-        toast.error('Failed to delete link')
-        setIsDeleting(false)
+        toast.error("Failed to delete link");
+        setIsDeleting(false);
       }
     }
-  }
+  };
 
   return (
     <>
@@ -40,19 +40,19 @@ const LinkCard = ({ link, onDelete, onUpdate }) => {
         layout
       >
         <div className="relative">
-          <InstagramEmbed url={link.url} className="w-full h-64 object-cover" />
-          
+          <InstagramEmbed url={link.url} className="w-full h-80 object-cover" />
+
           {/* Overlay with actions */}
-          <motion.div 
-            className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center space-x-3"
+          <motion.div
+            className="absolute inset-0 bg-black bg-opacity-60 h-[404px] flex items-center justify-center space-x-3 z-10"
             initial={{ opacity: 0 }}
             animate={{ opacity: isHovered ? 1 : 0 }}
             transition={{ duration: 0.3 }}
           >
             <button
               onClick={(e) => {
-                e.stopPropagation()
-                handleCopyLink()
+                e.stopPropagation();
+                handleCopyLink();
               }}
               className="p-2 bg-netflix-red rounded-full hover:bg-red-700 transition-colors"
               title="Copy link"
@@ -61,8 +61,8 @@ const LinkCard = ({ link, onDelete, onUpdate }) => {
             </button>
             <button
               onClick={(e) => {
-                e.stopPropagation()
-                window.open(link.url, '_blank')
+                e.stopPropagation();
+                window.open(link.url, "_blank");
               }}
               className="p-2 bg-netflix-red rounded-full hover:bg-red-700 transition-colors"
               title="Open in new tab"
@@ -71,8 +71,8 @@ const LinkCard = ({ link, onDelete, onUpdate }) => {
             </button>
             <button
               onClick={(e) => {
-                e.stopPropagation()
-                setShowModal(true)
+                e.stopPropagation();
+                setShowModal(true);
               }}
               className="p-2 bg-netflix-red rounded-full hover:bg-red-700 transition-colors"
               title="Edit"
@@ -81,8 +81,8 @@ const LinkCard = ({ link, onDelete, onUpdate }) => {
             </button>
             <button
               onClick={(e) => {
-                e.stopPropagation()
-                handleDelete()
+                e.stopPropagation();
+                handleDelete();
               }}
               disabled={isDeleting}
               className="p-2 bg-red-600 rounded-full hover:bg-red-800 transition-colors disabled:opacity-50"
@@ -93,16 +93,26 @@ const LinkCard = ({ link, onDelete, onUpdate }) => {
           </motion.div>
         </div>
 
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="bg-netflix-red text-xs px-2 py-1 rounded-full">{link.tag}</span>
-            <span className="text-xs text-netflix-lightGray">
-              {new Date(link.createdAt).toLocaleDateString()}
-            </span>
+        <div className="relative z-10 p-4">
+          {/* Gradient background overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none"></div>
+
+          <div className="relative">
+            <div className="flex items-center justify-between mb-2">
+              <span className="bg-netflix-red text-xs px-2 py-1 rounded-full">
+                {link.tag}
+              </span>
+              {/* <span className="text-xs text-netflix-lightGray">
+                {new Date(link.createdAt).toLocaleDateString()}
+              </span> */}
+            </div>
+
+            {link.caption && (
+              <p className="text-sm text-netflix-lightGray line-clamp-2">
+                {link.caption}
+              </p>
+            )}
           </div>
-          {link.caption && (
-            <p className="text-sm text-netflix-lightGray line-clamp-2">{link.caption}</p>
-          )}
         </div>
       </motion.div>
 
@@ -115,7 +125,7 @@ const LinkCard = ({ link, onDelete, onUpdate }) => {
         />
       )}
     </>
-  )
-}
+  );
+};
 
-export default LinkCard
+export default LinkCard;

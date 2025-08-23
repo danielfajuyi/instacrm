@@ -33,10 +33,10 @@ app.use(
 // Trust Vercel's proxy
 app.set("trust proxy", 1); // 1 = trust first proxy
 
-// CORS configuration
+// ✅ CORS configuration (only allow your frontend localhost for now)
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
@@ -44,15 +44,15 @@ app.use(
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 100,
   message: "Too many requests from this IP, please try again later.",
 });
 app.use("/api/", limiter);
 
 // Stricter rate limiting for POST requests
 const postLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // limit each IP to 20 POST requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 20,
   skip: (req) => req.method !== "POST",
 });
 app.use("/api/links", postLimiter);
