@@ -74,14 +74,6 @@ app.get("/api/health", (req, res) => {
 // API routes
 app.use("/api/links", linkRoutes);
 
-// Add this BEFORE the 404 handler
-app.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "API is working. Try /api/links",
-  });
-});
-
 // 404 handler
 app.use("*", (req, res) => {
   res.status(404).json({
